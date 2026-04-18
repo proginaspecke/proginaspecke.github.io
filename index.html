@@ -74,15 +74,33 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 0.35rem;
         text-align: center;
-        color: #334155;
-        font-size: 0.92rem;
+        padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(1rem, 3vw, 1.35rem);
+        border-radius: 12px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 1px solid #cbd5e1;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
         line-height: 1.35;
       }
 
       .embed-note-arrow,
       .embed-note-text {
         display: block;
+      }
+
+      .embed-note-arrow {
+        font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+        line-height: 1;
+        color: #2563eb;
+        font-weight: 700;
+      }
+
+      .embed-note-text {
+        font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+        font-weight: 600;
+        color: #0f172a;
+        letter-spacing: 0.01em;
       }
 
       .wip-button {
@@ -92,11 +110,6 @@
         display: inline-block;
         color: #334155;
         text-decoration: none;
-      }
-
-      .wip-button:hover,
-      .wip-button:focus-visible {
-        text-decoration: underline;
       }
 
       @media (max-width: 768px) {
@@ -133,16 +146,6 @@
         jeszcze komuś przydać.
       </p>
 
-      <p>
-        Dane pochodzą z:
-        <a
-          href="https://www.cmkp.edu.pl/ksztalcenie/postepowania-kwalifikacyjne"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Centrum Medycznego Kształcenia Podyplomowego</a
-        >.<br />
-        Ostatnia aktualizacja: wiosna 2026.
-      </p>
 
       <p class="muted">Jak będę miał czas, to może coś fajnego jeszcze tu dorzucę 😊</p>
 
@@ -160,7 +163,17 @@
           <span class="embed-note-text">Przełącz na następną stronę</span>
         </p>
       </section>
-
+      
+      <p>
+        Dane pochodzą z:
+        <a
+          href="https://www.cmkp.edu.pl/ksztalcenie/postepowania-kwalifikacyjne"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Centrum Medycznego Kształcenia Podyplomowego</a
+        >.<br />
+        Ostatnia aktualizacja: wiosna 2026.
+      </p>
       <a class="wip-button" href="wip.html">work in progress</a>
     </main>
   </body>
