@@ -68,10 +68,19 @@
 
       .embed-note {
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
         color: #334155;
         font-size: 0.92rem;
         line-height: 1.35;
+      }
+
+      .embed-note-arrow,
+      .embed-note-text {
+        display: block;
       }
 
       .wip-button {
@@ -145,8 +154,8 @@
           ></iframe>
         </div>
         <p class="embed-note">
-          ↑<br />
-          Przełącz na następną stronę
+          <span class="embed-note-arrow">↑</span>
+          <span class="embed-note-text">Przełącz na następną stronę</span>
         </p>
       </section>
 
