@@ -64,10 +64,10 @@
       }
 
       main {
-        width: min(1200px, 100%);
+        width: min(1400px, 100%);
         margin: 0 auto;
         padding: clamp(1rem, 2.5vw, 2rem);
-        padding-bottom: clamp(1.25rem, 3vw, 2rem);
+        padding-bottom: 5rem;
       }
 
       h1 {
@@ -86,10 +86,10 @@
         color: #475569;
       }
 
-      .report-stack {
+      .report-primary {
         display: grid;
         gap: clamp(0.65rem, 1.8vw, 1rem);
-        margin-top: 1rem;
+        margin: clamp(0.75rem, 2vw, 1.25rem) 0 clamp(1.5rem, 3vw, 2rem);
       }
 
       .report-wrap {
@@ -104,9 +104,13 @@
       .report-wrap iframe {
         display: block;
         width: 100%;
-        min-height: clamp(500px, 74vh, 920px);
+        min-height: clamp(640px, 86vh, 1200px);
         border: 0;
         background: #fff;
+      }
+
+      .page-copy {
+        max-width: 75ch;
       }
 
       .embed-note {
@@ -152,35 +156,19 @@
         margin-bottom: 0;
       }
 
-      .wip-button-wrap {
-        margin: 0.4rem 0 0;
-        line-height: 1.4;
-      }
-
-      .wip-button-wrap:last-child {
-        margin-bottom: 0;
-      }
-
       .wip-button {
+        position: fixed;
+        right: clamp(0.7rem, 2vw, 1.1rem);
+        bottom: clamp(0.7rem, 2vw, 1.1rem);
         display: inline-block;
-        font-size: 0.68rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        color: #94a3b8;
+        color: #334155;
         text-decoration: none;
-        border-bottom: 1px solid transparent;
-        transition: color 0.15s ease, border-color 0.15s ease;
-      }
-
-      .wip-button:hover {
-        color: #64748b;
-        border-bottom-color: #cbd5e1;
       }
 
       @media (max-width: 768px) {
         main {
           padding: 0.85rem;
-          padding-bottom: 1.25rem;
+          padding-bottom: 4.5rem;
         }
 
         .report-wrap {
@@ -188,7 +176,7 @@
         }
 
         .report-wrap iframe {
-          min-height: 70vh;
+          min-height: 80vh;
         }
       }
     </style>
@@ -199,36 +187,34 @@
 
       <p>
         <strong>
-          Raporty poniżej przedstawiają:<br>
-          - progi punktowe na specjalizacje, z podziałem na województwa i lata<br>
-          - symulację dostępności miejsc w zależności od wyniku<br>
+          Raport poniżej przedstawia progi punktowe na specjalizacje (województwa i lata)
+          oraz symulację dostępności miejsc w zależności od wyniku.
         </strong>
       </p>
 
-      <p>
-        Z tego co wiem, w internecie nie ma obecnie równie kompleksowego
-        zestawienia dla specjalizacji stomatologicznych. Zebrałem te dane
-        przygotowując się do wyboru specki i udostępniam je z myślą, że mogą się
-        jeszcze komuś przydać.
-      </p>
-
-
-      <p class="muted">Jak będę miał czas, to może coś fajnego jeszcze tu dorzucę 😊</p>
-
-      <section class="report-stack" aria-label="Raporty Power BI z progami punktowymi">
+      <section class="report-primary" aria-label="Raport Looker Studio z progami punktowymi">
         <div class="report-wrap">
           <iframe
-            title="PowerBI Report"
-            src="https://app.powerbi.com/view?r=eyJrIjoiNzNmYzRmN2EtYzdjNC00ODY1LTk5YTEtNzZiMjQ3ZWRmNzEyIiwidCI6IjQ1NDIwZThkLTg1NTItNGEwMy05YjkyLWE5MzFlZjgzOWQzZiIsImMiOjh9&pageName=72594d30035d4d320064"
-            allowfullscreen="true"
-            loading="lazy"
+            title="Raport Looker Studio — progi punktowe na specjalizacje stomatologiczne"
+            src="https://datastudio.google.com/embed/reporting/c8cc2fbf-3391-4e06-9d6a-ff36db063783/page/5JJ0F"
+            allowfullscreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            loading="eager"
+            referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </div>
-        <p class="embed-note">
-          <span class="embed-note-arrow">↑</span>
-          <span class="embed-note-text">Przełącz na następną stronę</span>
-        </p>
       </section>
+
+      <div class="page-copy">
+        <p>
+          Z tego co wiem, w internecie nie ma obecnie równie kompleksowego
+          zestawienia dla specjalizacji stomatologicznych. Zebrałem te dane
+          przygotowując się do wyboru specki i udostępniam je z myślą, że mogą się
+          jeszcze komuś przydać.
+        </p>
+
+        <p class="muted">Jak będę miał czas, to może coś fajnego jeszcze tu dorzucę 😊</p>
+      </div>
 
       <p class="muted">
         🤔 - jak obliczyć ilość punktów rekrutacyjnych?<br />
@@ -251,9 +237,7 @@
           >. <br>Ostatnia aktualizacja: wiosna 2026.
         </p>
       </section>
-      <p class="wip-button-wrap muted">
-        <a class="wip-button" href="wip.html" rel="nofollow">work in progress</a>
-      </p>
+      <a class="wip-button" href="wip.html" rel="nofollow">work in progress</a>
     </main>
   </body>
 </html>
