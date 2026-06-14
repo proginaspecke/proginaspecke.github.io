@@ -56,11 +56,17 @@
         box-sizing: border-box;
       }
 
+      html {
+        overflow-x: hidden;
+      }
+
       body {
         margin: 0;
         font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
         background: #f7f8fb;
         color: #1f2937;
+        overflow-x: hidden;
+        max-width: 100%;
       }
 
       main {
@@ -92,20 +98,63 @@
       }
 
       .report-wrap {
+        position: relative;
         width: 100%;
         border-radius: 14px;
         overflow: hidden;
         background: #ffffff;
         border: 1px solid #e2e8f0;
         box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+        overscroll-behavior: contain;
+      }
+
+      .report-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: rgba(15, 23, 42, 0);
+        transition: background 0.18s ease;
       }
 
       .report-wrap iframe {
         display: block;
+        position: relative;
+        z-index: 0;
         width: 100%;
         min-height: clamp(640px, 86vh, 1200px);
         border: 0;
         background: #fff;
+        transition:
+          filter 0.18s ease,
+          opacity 0.18s ease;
+      }
+
+      .report-wrap:fullscreen,
+      .report-wrap:-webkit-full-screen {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .report-wrap:fullscreen iframe,
+      .report-wrap:-webkit-full-screen iframe {
+        flex: 1 1 auto;
+        width: 100%;
+        min-height: 0;
+        height: 100%;
+      }
+
+      body.embed-interacting {
+        overflow: hidden;
+        width: 100%;
       }
 
       .page-copy {
@@ -124,6 +173,7 @@
         text-align: center;
         padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(1rem, 3vw, 1.35rem);
         line-height: 1.35;
+        pointer-events: none;
       }
 
       .embed-note-arrow,
@@ -143,6 +193,105 @@
         font-weight: 600;
         color: #0f172a;
         letter-spacing: 0.01em;
+      }
+
+      .embed-tap-bar {
+        display: none;
+      }
+
+      .embed-scroll-shield {
+        display: none;
+      }
+
+      .embed-exit {
+        display: none;
+      }
+
+      .report-wrap[data-active="false"] {
+        overflow: hidden;
+        overscroll-behavior: auto;
+        touch-action: pan-y;
+      }
+
+      .report-wrap[data-active="false"]::after {
+        background: rgba(15, 23, 42, 0);
+      }
+
+      .report-wrap[data-active="false"] .embed-scroll-shield {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        background: rgba(15, 23, 42, 0.28);
+        touch-action: pan-y;
+      }
+
+      .report-wrap[data-active="false"] iframe {
+        pointer-events: none;
+        filter: grayscale(1);
+        opacity: 0.58;
+      }
+
+      .report-wrap[data-active="false"] .embed-tap-bar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.85rem;
+        background: #eff6ff;
+        border-bottom: 1px solid #dbeafe;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .report-wrap[data-active="true"] .embed-tap-bar {
+        display: none;
+      }
+
+      .embed-activate {
+        appearance: none;
+        cursor: pointer;
+        border: 0;
+        background: transparent;
+        font: inherit;
+        color: #1d4ed8;
+        font-size: 0.92rem;
+        font-weight: 600;
+        text-align: center;
+        padding: 0.15rem 0.25rem;
+        line-height: 1.35;
+      }
+
+      .embed-scroll-hint {
+        margin: 0;
+        font-size: 0.82rem;
+        color: #475569;
+        line-height: 1.35;
+      }
+
+      .report-wrap[data-active="true"] .embed-exit {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 0.75rem;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        background: rgba(255, 255, 255, 0.96);
+        color: #0f172a;
+        font: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+      }
+
+      .report-wrap[data-active="true"] .embed-exit:hover {
+        background: #f8fafc;
       }
 
       .seo-analysis {
@@ -211,8 +360,10 @@
         }
 
         .report-wrap iframe {
-          min-height: 80vh;
+          height: 80vh;
+          min-height: 0;
         }
+
       }
     </style>
   </head>
@@ -228,8 +379,17 @@
       </p>
 
       <section class="report-primary" aria-label="Raport Looker Studio z progami punktowymi">
-        <div class="report-wrap">
+        <div class="report-wrap" data-report data-active="false">
+          <div class="embed-tap-bar">
+            <p class="embed-scroll-hint">Poczekaj chwilę, jeśli się jeszcze nie załadowało</p>
+            <button type="button" class="embed-activate">Dotknij, aby korzystać z raportu</button>
+          </div>
+          <button type="button" class="embed-exit" aria-label="Zakończ interakcję z raportem">
+            Zakończ interakcję
+          </button>
+          <div class="embed-scroll-shield" aria-hidden="true"></div>
           <iframe
+            id="report-iframe"
             title="Raport Looker Studio — progi punktowe na specjalizacje stomatologiczne"
             src="https://datastudio.google.com/embed/reporting/d0924616-5bc7-4005-8f39-8315fcadf066/page/10N0F"
             allowfullscreen
@@ -391,6 +551,7 @@
       
 
       <section class="page-meta muted" aria-label="Źródło danych">
+        <p>kontakt: stenzelpawel.t@gmail.com</p>
         <p>
           Dane w raportach pochodzą z
           <a
@@ -398,9 +559,170 @@
             target="_blank"
             rel="noopener noreferrer"
             >Centrum Medycznego Kształcenia Podyplomowego</a
-          >. <br>Ostatnia aktualizacja: wiosna 2026.
+          >. <br>Raport ma charakter informacyjny i został przygotowany na podstawie publicznie dostępnych danych. W przypadku rozbieżności wiążące są informacje publikowane przez CMKP. Strona jest prywatną inicjatywą i nie jest powiązana z CMKP ani żadną inną instytucją publiczną.<br>Ostatnia aktualizacja: wiosna 2026.
         </p>
       </section>
     </main>
+
+    <script>
+      (function () {
+        const reportWrap = document.querySelector("[data-report]");
+        const fullscreenButton = document.getElementById("report-fullscreen");
+        const embedTapBar = reportWrap?.querySelector(".embed-tap-bar");
+        const embedActivate = reportWrap?.querySelector(".embed-activate");
+        const embedExit = reportWrap?.querySelector(".embed-exit");
+        const mobileLayoutQuery = window.matchMedia("(max-width: 768px)");
+        let savedScrollY = 0;
+        let pageScrollLocked = false;
+
+        function isMobileLayout() {
+          return mobileLayoutQuery.matches;
+        }
+
+        function getFullscreenElement() {
+          return document.fullscreenElement || document.webkitFullscreenElement || null;
+        }
+
+        function isReportFullscreen() {
+          return getFullscreenElement() === reportWrap;
+        }
+
+        function lockPageScroll() {
+          if (pageScrollLocked) return;
+          savedScrollY = window.scrollY;
+          document.body.classList.add("embed-interacting");
+          document.body.style.top = "-" + savedScrollY + "px";
+          document.body.style.position = "fixed";
+          pageScrollLocked = true;
+        }
+
+        function unlockPageScroll() {
+          if (!pageScrollLocked) return;
+          document.body.classList.remove("embed-interacting");
+          document.body.style.top = "";
+          document.body.style.position = "";
+          window.scrollTo(0, savedScrollY);
+          pageScrollLocked = false;
+        }
+
+        function setEmbedActive(active) {
+          if (!reportWrap) return;
+          reportWrap.dataset.active = active ? "true" : "false";
+          if (active && isMobileLayout() && !getFullscreenElement()) {
+            lockPageScroll();
+          } else {
+            unlockPageScroll();
+          }
+        }
+
+        function requestReportFullscreen() {
+          if (!reportWrap) return;
+
+          if (isReportFullscreen()) {
+            return;
+          }
+
+          const requestFullscreen =
+            reportWrap.requestFullscreen ||
+            reportWrap.webkitRequestFullscreen ||
+            reportWrap.msRequestFullscreen;
+
+          if (requestFullscreen) {
+            setEmbedActive(true);
+            const fullscreenRequest = requestFullscreen.call(reportWrap);
+
+            if (fullscreenRequest?.catch) {
+              fullscreenRequest.catch(function () {
+                setEmbedActive(false);
+              });
+            }
+            return;
+          }
+
+          setEmbedActive(true);
+        }
+
+        function exitReportInteraction() {
+          const exitFullscreen =
+            document.exitFullscreen ||
+            document.webkitExitFullscreen ||
+            document.msExitFullscreen;
+
+          if (getFullscreenElement() && exitFullscreen) {
+            exitFullscreen.call(document);
+            return;
+          }
+
+          setEmbedActive(false);
+        }
+
+        function syncInteractionState() {
+          if (!reportWrap) return;
+
+          if (isReportFullscreen()) {
+            setEmbedActive(true);
+            return;
+          }
+
+          setEmbedActive(false);
+        }
+
+        if (reportWrap) {
+          syncInteractionState();
+          mobileLayoutQuery.addEventListener("change", syncInteractionState);
+
+          embedTapBar?.addEventListener("click", function () {
+            requestReportFullscreen();
+          });
+
+          embedTapBar?.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              requestReportFullscreen();
+            }
+          });
+
+          embedActivate?.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            requestReportFullscreen();
+          });
+
+          embedExit?.addEventListener("click", function () {
+            exitReportInteraction();
+          });
+        }
+
+        function updateFullscreenButton() {
+          if (!fullscreenButton) return;
+          fullscreenButton.textContent = getFullscreenElement()
+            ? "Zamknij pełny ekran"
+            : "Pełny ekran";
+        }
+
+        fullscreenButton?.addEventListener("click", function () {
+          if (!reportWrap) return;
+
+          if (getFullscreenElement()) {
+            exitReportInteraction();
+            return;
+          }
+
+          requestReportFullscreen();
+        });
+
+        document.addEventListener("fullscreenchange", function () {
+          updateFullscreenButton();
+          syncInteractionState();
+        });
+
+        document.addEventListener("webkitfullscreenchange", function () {
+          updateFullscreenButton();
+          syncInteractionState();
+        });
+
+        updateFullscreenButton();
+      })();
+    </script>
   </body>
 </html>
