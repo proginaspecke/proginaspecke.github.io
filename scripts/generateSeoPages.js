@@ -259,13 +259,13 @@ function renderSpecialtyPage(item) {
     <main><nav class="breadcrumbs" aria-label="Okruszki"><a href="/">Strona główna</a><span>/</span><a href="/specjalizacje/">Specjalizacje</a><span>/</span><span>${safeName}</span></nav>
     <section class="hero"><p class="eyebrow">Dane rekrutacyjne ${escapeHtml(oldest)} – ${escapeHtml(latest)}</p><h1>${safeName} – progi punktowe i wyniki rekrutacji</h1>
       <p class="lead">Sprawdź historyczne progi punktowe, liczbę miejsc oraz wyniki rekrutacji dla specjalizacji <strong>${safeName}</strong>.</p>
-      <div class="actions"><a class="button button-primary" href="${reportHref}">Otwórz pełny raport dla: ${safeName}</a><a class="button button-secondary" href="${calculatorHref}">Oblicz wynik w kalkulatorze</a></div>
+      <div class="actions"><a class="button button-primary" href="${reportHref}">Otwórz pełny raport dla: ${safeName}</a></div>
       <p class="action-copy">Oblicz swój wynik i sprawdź, na ile miejsc w poprzednich rekrutacjach byłby wystarczający.</p></section>
     <section class="content-section latest"><h2>Dane z ostatniej zakończonej rekrutacji – ${escapeHtml(latest)}</h2>${summaries}
       <p class="footnote">*Orientacyjne przeliczenie progu procentowego. Szczegółowe składniki punktacji znajdziesz w kalkulatorze.</p></section>
     ${sections}
     <section class="cta-panel"><div><p class="eyebrow">Interaktywny raport</p><h2>Porównaj swój wynik z poprzednimi rekrutacjami</h2><p>Wybierz specjalizację, tryb szkolenia, nabór i województwo, aby zobaczyć pełne dane oraz symulację.</p></div>
-      <div class="actions"><a class="button button-primary" href="${reportHref}">Otwórz pełny raport dla: ${safeName}</a><a class="button button-secondary" href="${calculatorHref}">Przejdź do kalkulatora</a></div></section>
+      <div class="actions"><a class="button button-secondary" href="${calculatorHref}">Przejdź do kalkulatora</a></div></section>
     </main>
     <footer class="site-footer"><div>Dane w raportach pochodzą z <a href="https://www.cmkp.edu.pl/ksztalcenie/postepowania-kwalifikacyjne">Centrum Medycznego Kształcenia Podyplomowego</a>.</div><div>Raport ma charakter informacyjny i został przygotowany na podstawie publicznie dostępnych danych. W przypadku rozbieżności wiążące są informacje publikowane przez CMKP. Strona jest prywatną inicjatywą i nie jest powiązana z CMKP ani żadną inną instytucją publiczną.</div><div><a href="${reportHref}">Otwórz pełny raport</a> <a href="/specjalizacje/">Wszystkie specjalizacje</a></div><div>kontakt: <a href="mailto:stenzelpawel.t@gmail.com">stenzelpawel.t@gmail.com</a></div><div>ostatnia aktualizacja: <time datetime="2026-09">09.2026</time></div></footer></body></html>`;
 }
