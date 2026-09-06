@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://progi-specjalizacje.pl/sitemap.xml

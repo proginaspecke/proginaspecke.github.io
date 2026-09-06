@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Production output
+dist/
+
+# Local dev server logs
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Test and coverage output
+coverage/
+playwright-report/
+test-results/
+
+# Generated SEO pages
+/public/specjalizacje/
+/public/sitemap-specializacje.xml
+/public/sitemap.xml

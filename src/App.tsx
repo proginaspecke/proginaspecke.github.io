@@ -1,0 +1,135 @@
+import { useEffect } from "react";
+import { Card } from "./components/Card";
+import { FilterPanel } from "./components/FilterControls";
+import { PivotTable } from "./components/PivotTable";
+import { SummaryChart } from "./components/SummaryChart";
+import { TextBox } from "./components/TextBox";
+import { Calculator } from "./components/Calculator";
+import { SimulationTable } from "./components/SimulationTable";
+import { dashboardLayout, type DashboardVisual } from "./config/dashboardLayout";
+import { getReportOptions } from "./data/reportData";
+import { useFilterStore } from "./state/filterStore";
+
+function specialtySlug(value: string) {
+  return value
+    .toLocaleLowerCase("pl")
+    .replace(/ł/g, "l")
+    .replace(/ą/g, "a")
+    .replace(/ć/g, "c")
+    .replace(/ę/g, "e")
+    .replace(/ń/g, "n")
+    .replace(/ó/g, "o")
+    .replace(/ś/g, "s")
+    .replace(/ź/g, "z")
+    .replace(/ż/g, "z")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getRequestedSpecialty() {
+  const requestedSlug = new URLSearchParams(window.location.search).get("specializacja");
+  if (!requestedSlug) return null;
+  return getReportOptions().dziedziny.find((specialty) => specialtySlug(specialty) === requestedSlug) ?? null;
+}
+
+function gridStyle(visual: DashboardVisual) {
+  return {
+    gridColumn: `${visual.grid.column} / span ${visual.grid.colSpan}`,
+    gridRow: `${visual.grid.row} / span ${visual.grid.rowSpan}`,
+  };
+}
+
+function renderVisual(visual: DashboardVisual) {
+  if (visual.type === "text") {
+    return <TextBox {...visual.props} />;
+  }
+
+  if (visual.type === "card") {
+    return <Card {...visual.props} />;
+  }
+
+  if (visual.type === "pivot") {
+    return <PivotTable {...visual.props} />;
+  }
+
+  if (visual.type === "chart") {
+    return <SummaryChart />;
+  }
+
+  if (visual.type === "calculator") {
+    return <Calculator />;
+  }
+
+  if (visual.type === "simulation") {
+    return <SimulationTable />;
+  }
+
+  return <FilterPanel {...visual.props} />;
+}
+
+export default function App() {
+  const isLoading = useFilterStore((state) => state.isLoading);
+  const loadSpecialtyData = useFilterStore((state) => state.loadSpecialtyData);
+  const setDziedzinaMedycyny = useFilterStore((state) => state.setDziedzinaMedycyny);
+
+  useEffect(() => {
+    const initializeReport = async () => {
+      const currentSpecialty = useFilterStore.getState().filters.dziedzinaMedycyny;
+      const requestedSpecialty = getRequestedSpecialty();
+      if (requestedSpecialty && requestedSpecialty !== currentSpecialty) {
+        await setDziedzinaMedycyny(requestedSpecialty);
+      } else {
+        await loadSpecialtyData(currentSpecialty);
+      }
+
+      const targetId = window.location.hash.slice(1);
+      if (targetId) {
+        window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView());
+      }
+    };
+
+    void initializeReport();
+  }, [loadSpecialtyData, setDziedzinaMedycyny]);
+
+  return (
+    <main className="dashboard-shell">
+      {isLoading && (
+        <div className="loading-overlay" aria-live="polite">
+          <div className="spinner" />
+          <span>Ładowanie danych...</span>
+        </div>
+      )}
+      <div className={`dashboard-grid ${isLoading ? "loading" : ""}`}>
+        {dashboardLayout.map((visual) => (
+          <div
+            key={visual.id}
+            id={visual.id === "pivot" ? "raport" : visual.id === "calculator" ? "kalkulator" : visual.id}
+            className={`dashboard-item visual-${visual.type} item-${visual.id}`}
+            style={gridStyle(visual)}
+          >
+            {renderVisual(visual)}
+          </div>
+        ))}
+      </div>
+      <footer className="dashboard-footer">
+        <a href="/specjalizacje/">Wszystkie specjalizacje</a>
+        <p>
+          Dane w raportach pochodzą z{" "}
+          <a href="https://www.cmkp.edu.pl/ksztalcenie/postepowania-kwalifikacyjne">
+            Centrum Medycznego Kształcenia Podyplomowego
+          </a>
+          .
+        </p>
+        <p>
+          Raport ma charakter informacyjny i został przygotowany na podstawie publicznie dostępnych danych. W
+          przypadku rozbieżności wiążące są informacje publikowane przez CMKP. Strona jest prywatną inicjatywą i nie
+          jest powiązana z CMKP ani żadną inną instytucją publiczną.
+        </p>
+        <p>kontakt: <a href="mailto:stenzelpawel.t@gmail.com">stenzelpawel.t@gmail.com</a></p>
+        <p>ostatnia aktualizacja: <time dateTime="2026-09">09.2026</time></p>
+      </footer>
+    </main>
+  );
+}

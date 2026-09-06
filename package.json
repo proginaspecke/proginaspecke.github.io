@@ -1,0 +1,27 @@
+{
+  "name": "powerbi-style-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "preprocess": "node scripts/preprocess.js",
+    "generate-seo": "node scripts/generateSeoPages.js",
+    "dev": "node scripts/preprocess.js && node scripts/generateSeoPages.js && vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "build": "node scripts/preprocess.js && node scripts/generateSeoPages.js && tsc && vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^6.0.5",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.7.2"
+  }
+}
