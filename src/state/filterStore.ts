@@ -7,7 +7,7 @@ const options = getReportOptions();
 const defaultFilters: ReportFilters = {
   trybSzkolenia: "Rezydencki",
   dziedzinaMedycyny:
-    options.dziedziny.find((item) => item === "Chirurgia stomatologiczna") ?? options.dziedziny[0] ?? "",
+    options.dziedziny.find((item) => item === "Otorynolaryngologia") ?? options.dziedziny[0] ?? "",
   przedstawWynikJako: "% punktów rekrutacyjnych (domyślne)",
 };
 
