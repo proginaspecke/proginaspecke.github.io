@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { SponsorWelcome } from "./components/SponsorWelcome";
 import { Card } from "./components/Card";
 import { FilterPanel } from "./components/FilterControls";
 import { PivotTable } from "./components/PivotTable";
@@ -94,7 +95,9 @@ export default function App() {
   }, [loadSpecialtyData, setDziedzinaMedycyny]);
 
   return (
-    <main className="dashboard-shell">
+    <>
+    <SponsorWelcome />
+    <main className="dashboard-shell" id="progi">
       {isLoading && (
         <div className="loading-overlay" aria-live="polite">
           <div className="spinner" />
@@ -131,5 +134,6 @@ export default function App() {
         <p>ostatnia aktualizacja: <time dateTime="2026-09">09.2026</time></p>
       </footer>
     </main>
+    </>
   );
 }
